@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f6f2">
+    <meta name="description" content="A simple, beautiful daily habit tracker with checkpoints, a seven-day view, and streaks.">
+    <title>Habit Bloom — Make the days count</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Habit Bloom home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>habit bloom<span class="brand-dot">.</span></span>
+        </a>
+        <div class="topbar-actions">
+          <span class="privacy-note"><span class="privacy-dot"></span> Saved on this device</span>
+          <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle theme">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.8A8.5 8.5 0 0 1 8.2 3.8 8.5 8.5 0 1 0 20.2 15.8Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="page-heading" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">YOUR DAILY PRACTICE <span class="eyebrow-line"></span> <span id="live-date"></span></p>
+            <h1 id="page-title">Make the days <em>count.</em></h1>
+            <p class="lead">Small steps add up. Show up for what matters today.</p>
+          </div>
+          <button class="primary-button heading-add" id="add-habit-top" type="button"><span aria-hidden="true">＋</span> New habit</button>
+        </section>
+
+        <section class="overview" aria-label="Progress overview">
+          <div class="momentum-card">
+            <div class="momentum-copy">
+              <span class="card-kicker">TODAY'S MOMENTUM</span>
+              <h2 id="momentum-title">Every step matters.</h2>
+              <p id="momentum-message">Choose a checkpoint to get started.</p>
+            </div>
+            <div class="progress-ring" id="progress-ring" role="img" aria-label="0 percent of today's checkpoints completed">
+              <div class="ring-inner"><strong id="progress-percent">0%</strong><small>done</small></div>
+            </div>
+            <span class="momentum-sparkle sparkle-one" aria-hidden="true">✳</span>
+            <span class="momentum-sparkle sparkle-two" aria-hidden="true">✳</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-purple" aria-hidden="true">✦</div>
+            <span class="stat-label">HABITS COMPLETED</span>
+            <strong id="habits-complete">0 <span>/ 0</span></strong>
+            <p>Finished for today</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-orange" aria-hidden="true">↗</div>
+            <span class="stat-label">CHECKPOINTS</span>
+            <strong id="checkpoints-complete">0 <span>/ 0</span></strong>
+            <p>Steps taken today</p>
+          </div>
+        </section>
+
+        <section class="week-section" aria-labelledby="week-title">
+          <div class="section-heading">
+            <div><p class="section-overline">A LOOK BACK</p><h2 id="week-title">Your week</h2></div>
+            <p>Pick a day to review or update its checkpoints.</p>
+          </div>
+          <div class="week-strip" id="week-strip" aria-label="Last seven days"></div>
+        </section>
+
+        <section class="habits-section" aria-labelledby="habits-title">
+          <div class="section-heading habits-heading">
+            <div><p class="section-overline">THE THINGS YOU SHOW UP FOR</p><h2 id="habits-title">Your habits <span class="habit-count" id="habit-count">0</span></h2></div>
+            <div class="habit-toolbar">
+              <button class="text-button" id="export-button" type="button" title="Download a backup of your habits">↓ Export data</button>
+              <button class="text-button" id="import-button" type="button" title="Restore habits from a Habit Bloom backup">↑ Import data</button>
+              <input id="import-file" type="file" accept="application/json,.json" hidden>
+              <button class="secondary-button" id="add-habit-inline" type="button"><span aria-hidden="true">＋</span> Add habit</button>
+            </div>
+          </div>
+          <div class="selected-day-banner" id="selected-day-banner" hidden>
+            <span id="selected-day-label"></span>
+            <button class="text-button" id="return-today" type="button">Back to today →</button>
+          </div>
+          <div class="habits-grid" id="habits-grid"></div>
+        </section>
+      </main>
+      <footer class="footer"><span>habit bloom<span class="brand-dot">.</span></span><span>Progress is a practice, not a finish line.</span></footer>
+    </div>
+
+    <dialog id="habit-dialog" class="habit-dialog" aria-labelledby="dialog-title">
+      <form id="habit-form" novalidate>
+        <div class="dialog-head"><div><p class="section-overline">MAKE IT YOURS</p><h2 id="dialog-title">New habit</h2></div><button class="icon-button close-button" type="button" id="close-dialog" aria-label="Close dialog">×</button></div>
+        <label for="habit-name">Habit name <span class="required">*</span></label>
+        <input id="habit-name" name="name" type="text" maxlength="48" placeholder="e.g. Read for 20 minutes" required>
+        <label for="habit-note">A little reminder <span class="optional">(optional)</span></label>
+        <input id="habit-note" name="note" type="text" maxlength="100" placeholder="Why this matters to you">
+        <div class="form-row">
+          <div><label for="habit-target">Checkpoints per day <span class="required">*</span></label><input id="habit-target" name="target" type="number" min="1" max="12" value="3" required></div>
+          <div><label for="habit-unit">Each checkpoint is</label><input id="habit-unit" name="unit" type="text" maxlength="24" placeholder="e.g. 10 minutes"></div>
+        </div>
+        <div class="form-row form-row-short">
+          <div><label for="habit-icon">Icon</label><input id="habit-icon" name="icon" type="text" maxlength="8" value="✦" aria-describedby="icon-hint"><small id="icon-hint">Use an emoji or symbol</small></div>
+          <div><label for="habit-color">Color</label><select id="habit-color" name="color"><option value="coral">Coral</option><option value="violet">Violet</option><option value="green">Green</option><option value="blue">Blue</option><option value="amber">Amber</option></select></div>
+        </div>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <div class="dialog-actions"><button class="text-button" type="button" id="cancel-dialog">Cancel</button><button class="primary-button" type="submit" id="save-habit">Create habit</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
